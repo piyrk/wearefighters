@@ -1,7 +1,7 @@
 ---
 title: Support Triage OpenEnv
 sdk: docker
-app_port: 8000
+app_port: 7860
 tags:
   - openenv
   - customer-support
@@ -133,14 +133,14 @@ pip install -e .
 ### Run the environment server
 
 ```bash
-uvicorn server.app:app --host 0.0.0.0 --port 8000
+uvicorn server.app:app --host 0.0.0.0 --port 7860
 ```
 
 ### Build with Docker
 
 ```bash
 docker build -t support-triage-env .
-docker run -p 8000:8000 support-triage-env
+docker run -p 7860:7860 support-triage-env
 ```
 
 ### Validate with OpenEnv
@@ -184,5 +184,6 @@ This project is container-first and suitable for a Hugging Face Space:
 - includes `openenv.yaml`
 - tags include `openenv`
 - server entrypoint is `server.app:app`
+- Hugging Face Docker Space port is `7860`
 
 # wearefighters
