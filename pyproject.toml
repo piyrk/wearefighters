@@ -10,12 +10,16 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
   "fastapi>=0.110.0",
+  "openenv-core>=0.2.0",
   "openai>=1.30.0",
   "pydantic>=2.6.0",
   "PyYAML>=6.0.1",
   "requests>=2.31.0",
   "uvicorn[standard]>=0.29.0",
 ]
+
+[project.scripts]
+server = "server.app:main"
 
 [tool.setuptools]
 include-package-data = true
@@ -25,4 +29,3 @@ include = ["support_triage_env*"]
 
 [tool.setuptools.package-data]
 support_triage_env = ["data/*.json"]
-

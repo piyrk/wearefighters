@@ -6,7 +6,7 @@ __pycache__/
 .mypy_cache/
 .venv/
 venv/
+*.egg-info/
 outputs/evals/*.generated.json
 outputs/logs/*
 !outputs/logs/.gitkeep
-
