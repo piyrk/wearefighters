@@ -1,0 +1,90 @@
+[
+  {
+    "id": "easy_account_access",
+    "title": "Login codes still going to old phone",
+    "difficulty": "easy",
+    "goal": "Route the ticket to the correct queue, set urgency, choose the correct response template, and submit only when the workspace is fully correct.",
+    "policy_notes": [
+      "If the customer is locked out after a device or phone change, route to account_support.",
+      "Use the password_reset template for login recovery and MFA reset issues.",
+      "Do not escalate unless the ticket mentions unauthorized access, suspicious purchases, or account takeover.",
+      "Do not mark requires_refund unless the customer explicitly needs a refund or was charged incorrectly."
+    ],
+    "ticket": {
+      "channel": "email",
+      "customer_tier": "standard",
+      "subject": "Can't log in after switching phones",
+      "body": "I replaced my phone yesterday and now the login code keeps going to the old number. I need to get back into my account before tomorrow morning. I do not see any suspicious purchases, I just cannot get in.",
+      "account_age_days": 412,
+      "prior_contacts": 0,
+      "order_value_usd": null
+    },
+    "answer": {
+      "category": "account_access",
+      "priority": "medium",
+      "route_to": "account_support",
+      "template": "password_reset",
+      "requires_escalation": false,
+      "requires_refund": false
+    }
+  },
+  {
+    "id": "medium_billing_refund",
+    "title": "Charged twice and still no delivery",
+    "difficulty": "medium",
+    "goal": "Follow ownership precedence carefully. The ticket mentions both shipping and billing, but only one queue should own the case.",
+    "policy_notes": [
+      "If a ticket includes a duplicate charge or direct refund request, billing_ops owns the case even if shipping is also mentioned.",
+      "Mark requires_refund true when the customer clearly asks for a refund or reports duplicate payment.",
+      "Use refund_review when money movement or duplicate charges are involved.",
+      "Escalation is false unless there is a security issue, legal threat, or safety concern."
+    ],
+    "ticket": {
+      "channel": "chat",
+      "customer_tier": "plus",
+      "subject": "Order charged twice and package hasn't moved",
+      "body": "Order 55192 has not arrived and the tracking link has been stuck for five days. On top of that, my card was charged twice for the same order. I either need the extra charge reversed or a full refund because this is taking too long.",
+      "account_age_days": 920,
+      "prior_contacts": 1,
+      "order_value_usd": 184.5
+    },
+    "answer": {
+      "category": "billing_refund",
+      "priority": "high",
+      "route_to": "billing_ops",
+      "template": "refund_review",
+      "requires_escalation": false,
+      "requires_refund": true
+    }
+  },
+  {
+    "id": "hard_account_security",
+    "title": "Unauthorized purchase and account takeover signs",
+    "difficulty": "hard",
+    "goal": "Resolve conflicting signals correctly. The customer mentions a chargeback and refund, but the security incident still takes priority.",
+    "policy_notes": [
+      "Any ticket with unauthorized purchases, changed shipping information, or account takeover signals must route to trust_safety.",
+      "Security incidents are urgent and require escalation.",
+      "Use security_hold when the account must be secured before any billing outcome is processed.",
+      "Do not set requires_refund during initial triage when fraud investigation and account security take precedence."
+    ],
+    "ticket": {
+      "channel": "email",
+      "customer_tier": "standard",
+      "subject": "Someone bought something on my account and changed my details",
+      "body": "I woke up to a purchase I did not make and then got kicked out of my account. The shipping address was changed and I have already emailed twice without hearing back. If this is not handled tonight I am filing a chargeback and posting screenshots everywhere.",
+      "account_age_days": 201,
+      "prior_contacts": 2,
+      "order_value_usd": 249.99
+    },
+    "answer": {
+      "category": "account_security",
+      "priority": "urgent",
+      "route_to": "trust_safety",
+      "template": "security_hold",
+      "requires_escalation": true,
+      "requires_refund": false
+    }
+  }
+]
+

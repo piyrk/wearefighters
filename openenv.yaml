@@ -1,0 +1,14 @@
+spec_version: 1
+name: support_triage_env
+version: "0.1.0"
+description: "Customer support ticket triage environment for OpenEnv"
+type: space
+runtime: fastapi
+app: server.app:app
+port: 8000
+action: SupportTriageAction
+observation: SupportTriageObservation
+tags:
+  - openenv
+  - customer-support
+  - triage
