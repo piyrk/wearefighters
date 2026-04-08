@@ -71,6 +71,8 @@ def score_task(client: OpenAI, model: str, task_id: str) -> dict[str, Any]:
         "task_id": task_id,
         "difficulty": observation.difficulty,
         "score": final_result.info["grader_score"],
+        "raw_accuracy": final_result.info.get("raw_accuracy"),
+        "task_completed": final_result.info.get("task_completed"),
         "done": final_result.done,
         "raw_model_output": raw_text,
         "final_feedback": final_result.observation.last_feedback,

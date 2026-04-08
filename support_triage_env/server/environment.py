@@ -8,7 +8,14 @@ try:
 except ImportError:
     Environment = object  # type: ignore[assignment]
 
-from support_triage_env.graders import GRADABLE_FIELDS, build_reward, grade_workspace, remaining_fields
+from support_triage_env.graders import (
+    GRADABLE_FIELDS,
+    build_reward,
+    grade_workspace,
+    raw_workspace_score,
+    remaining_fields,
+    workspace_complete,
+)
 
 from support_triage_env.compat import StepResult
 from support_triage_env.models import (
@@ -99,7 +106,8 @@ class SupportTriageEnvironment(Environment):
             if before_details[field_name]["correct"] and not after_details[field_name]["correct"]
         ]
 
-        solved = after_score == 1.0 and action.submit
+        is_complete = workspace_complete(self._task, self._state.workspace)
+        solved = is_complete and action.submit
         exhausted_steps = self._state.step_count >= self._state.max_steps and not solved
         reward_breakdown = build_reward(
             improved_fields=improved_fields,
@@ -141,6 +149,8 @@ class SupportTriageEnvironment(Environment):
         )
         info: dict[str, Any] = {
             "grader_score": round(after_score, 4),
+            "raw_accuracy": raw_workspace_score(self._task, self._state.workspace),
+            "task_completed": solved,
             "improved_fields": improved_fields,
             "regressed_fields": regressed_fields,
             "repeated_fields": repeated_fields,

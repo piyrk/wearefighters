@@ -32,6 +32,10 @@ def fmt_reward(value: float | int | bool | None) -> str:
     return f"{float(value or 0.0):.2f}"
 
 
+def bounded_fallback_score() -> float:
+    return 0.01
+
+
 def build_prompt(observation: Any) -> str:
     return (
         "You are a customer support triage analyst.\n"
@@ -72,7 +76,7 @@ def run_task(client: OpenAI, model_name: str, task_id: str) -> None:
     env = SupportTriageEnvironment()
     step_count = 0
     rewards: list[str] = []
-    final_score = 0.0
+    final_score = bounded_fallback_score()
     success = False
 
     emit(f"[START] task={task_id} env={ENV_NAME} model={model_name}")
@@ -109,8 +113,8 @@ def run_task(client: OpenAI, model_name: str, task_id: str) -> None:
             f"reward={fmt_reward(final_result.reward)} done={to_bool_str(final_result.done)} error=null"
         )
 
-        final_score = float(final_result.metadata.get("grader_score", 0.0))
-        success = bool(final_result.done and final_score >= 1.0)
+        final_score = float(final_result.metadata.get("grader_score", bounded_fallback_score()))
+        success = bool(final_result.metadata.get("task_completed", False))
     except Exception:
         pass
     finally:

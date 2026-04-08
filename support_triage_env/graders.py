@@ -18,7 +18,18 @@ def _to_jsonable(value: Any) -> Any:
     return getattr(value, "value", value)
 
 
-def grade_workspace(task: SupportTaskSpec, workspace: TicketWorkspace) -> tuple[float, dict[str, dict[str, Any]]]:
+def _bounded_score(correct: int, total: int) -> float:
+    # Validator requires task scores to remain strictly inside (0, 1).
+    return round((correct + 0.5) / (total + 1), 4)
+
+
+def _raw_score(correct: int, total: int) -> float:
+    return round(correct / total, 4)
+
+
+def evaluate_workspace(
+    task: SupportTaskSpec, workspace: TicketWorkspace
+) -> tuple[int, int, dict[str, dict[str, Any]]]:
     details: dict[str, dict[str, Any]] = {}
     correct = 0
 
@@ -34,7 +45,22 @@ def grade_workspace(task: SupportTaskSpec, workspace: TicketWorkspace) -> tuple[
         if is_correct:
             correct += 1
 
-    return correct / len(GRADABLE_FIELDS), details
+    return correct, len(GRADABLE_FIELDS), details
+
+
+def grade_workspace(task: SupportTaskSpec, workspace: TicketWorkspace) -> tuple[float, dict[str, dict[str, Any]]]:
+    correct, total, details = evaluate_workspace(task, workspace)
+    return _bounded_score(correct, total), details
+
+
+def raw_workspace_score(task: SupportTaskSpec, workspace: TicketWorkspace) -> float:
+    correct, total, _ = evaluate_workspace(task, workspace)
+    return _raw_score(correct, total)
+
+
+def workspace_complete(task: SupportTaskSpec, workspace: TicketWorkspace) -> bool:
+    correct, total, _ = evaluate_workspace(task, workspace)
+    return correct == total
 
 
 def remaining_fields(task: SupportTaskSpec, workspace: TicketWorkspace) -> list[str]:
@@ -74,4 +100,3 @@ def build_reward(
         4,
     )
     return reward
-

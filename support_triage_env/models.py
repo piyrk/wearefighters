@@ -114,6 +114,7 @@ class SupportTriageObservation(Observation):
 
 
 class SupportTriageState(State):
+    cum_reward: float = 0.0
     current_task_id: str | None = None
     task_cursor: int = 0
     max_steps: int = 6
